@@ -2,11 +2,47 @@ namespace CookBook;
 
 public class Recipe
 {
-    public int Id { get; set; }
-    public Type MealType { get; set; }
-    public string Name { get; set; }
-    public List<Ingredient> Ingredients { get; set; }
-    public string Description { get; set; }
+    private int _id;
+
+    public int Id
+    {
+        get => _id;
+        set
+        {
+            if(value > 0) _id = value;
+            else throw new ArgumentException("Invalid ID - must be positive.");
+        }
+    }
+    private Type _mealType;
+
+    public Type MealType
+    {
+        get => _mealType;
+        set => _mealType = value;
+    }
+    
+    private string _name;
+
+    public string Name
+    {
+        get => _name;
+        set => _name = string.IsNullOrEmpty(value) ? throw new ArgumentException("Name cannot be empty.") : value;
+    }
+    private List<Ingredient> _ingredients = new List<Ingredient>();
+
+    public IReadOnlyList<Ingredient> Ingredients
+    {
+        get => _ingredients.AsReadOnly();
+    }
+   
+    public void AddIngredient(Ingredient ingredient)
+    {
+        if (!string.IsNullOrEmpty(ingredient.Name))
+            _ingredients.Add(ingredient);
+    }
+    
+    private string _description;
+    public string Description { get => _description; set => _description = value; }
 
     public enum Type
     {

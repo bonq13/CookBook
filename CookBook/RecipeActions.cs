@@ -2,12 +2,11 @@ namespace CookBook;
 
 public class RecipeActions
 {
-    public static List<Recipe> recipes = new List<Recipe>();
+    private static List<Recipe> recipes = new List<Recipe>();
 
     public static void AddRecipe()
     {
         Recipe recipe = new Recipe();
-        recipe.Ingredients = new List<Ingredient>(); 
         Console.WriteLine("Enter Recipe ID:");
         Int32.TryParse(Console.ReadLine(), out int recipeId);
         recipe.Id = recipeId;
@@ -33,7 +32,7 @@ public class RecipeActions
         bool ingredientsAmount = false;
         while (!ingredientsAmount)
         {
-            recipe.Ingredients.Add(IngredientActions.AddIngredient()); 
+            recipe.AddIngredient(IngredientActions.AddIngredient());
             Console.WriteLine("Do you want to add another ingredient? (1 - yes / 2 - no):");
             string userAnswer = Console.ReadLine();
             if (Int32.TryParse(userAnswer, out int answer) && answer == 1)
@@ -80,25 +79,20 @@ public class RecipeActions
     {
         if (Int32.TryParse(Console.ReadLine(), out int answer) && answer != 0)
         {
-            foreach (Recipe recipe in recipes)
+            Recipe foundRecipe = recipes.FirstOrDefault(r => r.Id == answer);
+            if (foundRecipe != null)
             {
-            
-                Console.WriteLine("Recipe Name: " + recipe.Name);
-                Console.WriteLine("Meal type: " + recipe.MealType);
-                if (recipe.Ingredients != null && recipe.Ingredients.Count > 0)
+                Console.WriteLine("Recipe Name: " + foundRecipe.Name);
+                Console.WriteLine("Ingredients:");
+                foreach (Ingredient ingredient in foundRecipe.Ingredients)
                 {
-                    Console.WriteLine("Ingredients:");
-                    foreach (Ingredient ingredient in recipe.Ingredients)
-                    {
-                        Console.WriteLine($"  {ingredient.Name}: {ingredient.Amount} {ingredient.MeasureUnit}");
-                    }
+                    Console.WriteLine($"  {ingredient.Name}: {ingredient.Amount} {ingredient.MeasureUnit}");
                 }
-                else
-                {
-                    Console.WriteLine(" No ingredients.");
-                }
-                Console.WriteLine("Recipe Description: " + recipe.Description);
-                Console.WriteLine();
+                Console.WriteLine("Description: " + foundRecipe.Description);
+            }
+            else
+            {
+                Console.WriteLine("Recipe not found.");
             }
             
         }

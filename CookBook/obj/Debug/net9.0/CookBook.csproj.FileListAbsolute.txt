@@ -12,3 +12,4 @@
 /Users/kabak/Documents/net/CookBook/CookBook/obj/Debug/net9.0/CookBook.pdb
 /Users/kabak/Documents/net/CookBook/CookBook/obj/Debug/net9.0/CookBook.genruntimeconfig.cache
 /Users/kabak/Documents/net/CookBook/CookBook/obj/Debug/net9.0/ref/CookBook.dll
+/Users/kabak/Documents/net/CookBook/CookBook/obj/Debug/net9.0/CookBook.sourcelink.json
