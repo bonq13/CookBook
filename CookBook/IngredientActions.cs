@@ -4,24 +4,27 @@ public class IngredientActions
 {
     public static Ingredient AddIngredient()
     {
-        Ingredient ingredient = new Ingredient();
         Console.WriteLine("\nIngredient name: ");
-        ingredient.Name = Console.ReadLine();
-        Console.WriteLine("\nIngredient amount: ");
-        int amount;
-        while (!Int32.TryParse(Console.ReadLine(), out amount) || amount <= 0)
+        string name = Console.ReadLine();
+        if (string.IsNullOrEmpty(name))
         {
-            Console.WriteLine("Please enter a valid positive number for amount: ");
+            Console.WriteLine("Ingredient name cannot be empty.");
+            return null; 
         }
-        ingredient.Amount = amount;
+        Console.WriteLine("\nIngredient amount: ");
+        if (!Int32.TryParse(Console.ReadLine(), out int amount))
+        {
+            Console.WriteLine("Please enter a valid number for amount.");
+            return null; // Lub ponów próbę
+        }
         Console.WriteLine("\nIngredient measure unit: 1 - gram, 2 - ml, 3 - piece, 4 - pinch");
         bool validUnit = false;
+        int unitChoice = 0;
         while (!validUnit)
         {
             string userInput = Console.ReadLine();
-            if (Int32.TryParse(userInput, out int unitChoice) && unitChoice >= 1 && unitChoice <= 4)
+            if (Int32.TryParse(userInput, out unitChoice) && unitChoice >= 1 && unitChoice <= 4)
             {
-                ingredient.MeasureUnit = (Ingredient.Unit)unitChoice;
                 validUnit = true;
             }
             else
@@ -30,7 +33,16 @@ public class IngredientActions
             }
         }
         
-        return ingredient;
+        try
+        {
+            Ingredient ingredient = new Ingredient(name, amount, (Ingredient.Unit)unitChoice);
+            return ingredient;
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return null;
+        }
         
     }
 }

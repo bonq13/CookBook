@@ -6,18 +6,22 @@ public class RecipeActions
 
     public static void AddRecipe()
     {
-        Recipe recipe = new Recipe();
+        int recipeId;
+        int typeChoice = 0;
+        string recipeName;
+        
+       
+        
         Console.WriteLine("Enter Recipe ID:");
-        Int32.TryParse(Console.ReadLine(), out int recipeId);
-        recipe.Id = recipeId;
+        Int32.TryParse(Console.ReadLine(), out recipeId);
+        
         Console.WriteLine("Choose meal type: \n breakfast = 1,\n soup = 2,\n dinner = 3,\n dessert = 4,\n snack = 5,");
         bool validType = false;
         while (!validType)
         {
             string userInput = Console.ReadLine();
-            if (Int32.TryParse(userInput, out int typeChoice) && typeChoice >= 1 && typeChoice <= 5)
+            if (Int32.TryParse(userInput, out typeChoice) && typeChoice >= 1 && typeChoice <= 5)
             {
-                recipe.MealType = (Recipe.Type)typeChoice;
                 validType = true;
             }
             else
@@ -27,7 +31,15 @@ public class RecipeActions
         }
         
         Console.WriteLine("Enter Recipe Name:");
-        recipe.Name = Console.ReadLine();
+        recipeName = Console.ReadLine();
+        if (string.IsNullOrEmpty(recipeName))
+        {
+            Console.WriteLine("Recipe name cannot be empty.");
+            return;
+        }
+        
+        Recipe recipe = new Recipe(recipeId, recipeName, (Recipe.Type)typeChoice);
+        
         Console.WriteLine("Enter Recipe Ingredients:");
         bool ingredientsAmount = false;
         while (!ingredientsAmount)
@@ -53,6 +65,7 @@ public class RecipeActions
         Console.WriteLine("\nEnter Recipe Description:");
         recipe.Description = Console.ReadLine();
 
+       
         recipes.Add(recipe);
     }
 

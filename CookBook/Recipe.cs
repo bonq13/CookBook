@@ -3,7 +3,28 @@ namespace CookBook;
 public class Recipe
 {
     private int _id;
+    private Type _mealType;
+    private string _name;
+    private string _description;
 
+     
+    public Recipe(int id, string name, Type mealType)
+    {
+        _id = id;
+        _name = name;
+        _mealType = mealType;
+
+    }
+
+    public Recipe()
+    {
+        Id = 1; 
+        Name = "Default Recipe";
+        MealType = Type.breakfast;
+        Description = string.Empty;
+        
+    }
+    
     public int Id
     {
         get => _id;
@@ -13,16 +34,19 @@ public class Recipe
             else throw new ArgumentException("Invalid ID - must be positive.");
         }
     }
-    private Type _mealType;
-
+    
     public Type MealType
     {
         get => _mealType;
-        set => _mealType = value;
+        set
+        {
+            if (Enum.IsDefined(typeof(Type), value))
+                _mealType = value;
+            else
+                throw new ArgumentException("Invalid meal type.");
+        }
     }
     
-    private string _name;
-
     public string Name
     {
         get => _name;
@@ -41,7 +65,7 @@ public class Recipe
             _ingredients.Add(ingredient);
     }
     
-    private string _description;
+
     public string Description { get => _description; set => _description = value; }
 
     public enum Type
