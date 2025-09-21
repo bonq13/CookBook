@@ -1,10 +1,10 @@
 namespace CookBook;
 
-public class RecipeActions
+public class RecipeService : IRecipeService
 {
-    private static List<Recipe> recipes = new List<Recipe>();
-
-    public static void AddRecipe()
+    private List<Recipe> recipes  = new List<Recipe>();
+    
+    public void AddRecipe()
     {
         int recipeId;
         int typeChoice = 0;
@@ -13,7 +13,11 @@ public class RecipeActions
        
         
         Console.WriteLine("Enter Recipe ID:");
-        Int32.TryParse(Console.ReadLine(), out recipeId);
+        if (!Int32.TryParse(Console.ReadLine(), out  recipeId) || recipeId <= 0)
+        {
+            Console.WriteLine("Please enter a valid positive number for ID.");
+            return;
+        }
         
         Console.WriteLine("Choose meal type: \n breakfast = 1,\n soup = 2,\n dinner = 3,\n dessert = 4,\n snack = 5,");
         bool validType = false;
@@ -38,38 +42,47 @@ public class RecipeActions
             return;
         }
         
-        Recipe recipe = new Recipe(recipeId, recipeName, (Recipe.Type)typeChoice);
-        
-        Console.WriteLine("Enter Recipe Ingredients:");
-        bool ingredientsAmount = false;
-        while (!ingredientsAmount)
+        try
         {
-            recipe.AddIngredient(IngredientActions.AddIngredient());
-            Console.WriteLine("Do you want to add another ingredient? (1 - yes / 2 - no):");
-            string userAnswer = Console.ReadLine();
-            if (Int32.TryParse(userAnswer, out int answer) && answer == 1)
-           {
-                ingredientsAmount = false;
-            }
-            else if (Int32.TryParse(userAnswer, out answer) && answer == 2)
+            Recipe recipe = new Recipe(recipeId, recipeName, (Recipe.Type)typeChoice);
+            Console.WriteLine("Enter Recipe Ingredients:");
+            bool ingredientsAmount = false;
+            while (!ingredientsAmount)
             {
-                ingredientsAmount = true;
+                recipe.AddIngredient(IngredientActions.AddIngredient());
+                Console.WriteLine("Do you want to add another ingredient? (1 - yes / 2 - no):");
+                string userAnswer = Console.ReadLine();
+                if (Int32.TryParse(userAnswer, out int answer) && answer == 1)
+                {
+                    ingredientsAmount = false;
+                }
+                else if (Int32.TryParse(userAnswer, out answer) && answer == 2)
+                {
+                    ingredientsAmount = true;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter 1 or 2: ");
+                    ingredientsAmount = false;
+                }
             }
-            else
-            {
-                Console.WriteLine("Please enter 1 or 2: ");
-                ingredientsAmount = false;
-            }
-        }
 
-        Console.WriteLine("\nEnter Recipe Description:");
-        recipe.Description = Console.ReadLine();
+            Console.WriteLine("\nEnter Recipe Description:");
+            recipe.Description = Console.ReadLine();
 
        
-        recipes.Add(recipe);
+            recipes.Add(recipe);
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return;
+        }
+        
+
     }
 
-    public static void ShowRecipes()
+    public void ShowRecipes()
     {
         if (recipes.Count == 0)
         {
@@ -88,7 +101,7 @@ public class RecipeActions
         FindRecipe();
     }
 
-    public static void FindRecipe()
+    public void FindRecipe()
     {
         if (Int32.TryParse(Console.ReadLine(), out int answer) && answer != 0)
         {
@@ -115,7 +128,7 @@ public class RecipeActions
         }
     }
 
-    public static void RemoveRecipe()
+    public void RemoveRecipe()
     {
         
         Console.WriteLine("Enter Recipe ID to remove (positive number):");

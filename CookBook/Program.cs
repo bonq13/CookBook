@@ -4,6 +4,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        IRecipeService service = new RecipeService();
+        
         
         Console.WriteLine("Welcome to the Cook Book app!");
         Console.WriteLine("What would you like to do?");
@@ -17,17 +19,17 @@ class Program
             switch (mainMenuAnswer)
             {
                 case 1:
-                    RecipeActions.AddRecipe();
+                    service.AddRecipe();
                     break;
                 case 2:
-                    RecipeActions.ShowRecipes();
+                    service.ShowRecipes();
                     break;
                 case 3:
                     Console.WriteLine("\nEnter recipe ID to find it.");
-                    RecipeActions.FindRecipe();
+                    service.FindRecipe();
                     break;
                 case 4:
-                    RecipeActions.RemoveRecipe();
+                    service.RemoveRecipe();
                     break;
                 case 5:
                     app = false;

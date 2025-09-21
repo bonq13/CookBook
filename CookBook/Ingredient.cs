@@ -34,11 +34,16 @@ public class Ingredient
             else throw new ArgumentException("Amount must be positive.");
         }
     }
-    
     public Unit MeasureUnit
     {
         get => _measureUnit;
-        set => _measureUnit = value;
+        set
+        {
+            if (Enum.IsDefined(typeof(Unit), value))
+                _measureUnit = value;
+            else
+                throw new ArgumentException("Invalid measure unit.");
+        }
     }
     public enum Unit
     {
